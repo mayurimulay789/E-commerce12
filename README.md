@@ -1,1 +1,2 @@
-# E-commerce12
+#.env
+#nodemodules

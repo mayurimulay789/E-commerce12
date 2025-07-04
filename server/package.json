@@ -4,8 +4,8 @@
   "description": "Backend for Ksauni Bliss E-commerce Platform",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node src/index.js",
+   "dev": "nodemon src/index.js",
     "test": "jest",
     "seed": "node scripts/seedData.js"
   },

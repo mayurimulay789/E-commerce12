@@ -6,11 +6,15 @@ import { useSelector, useDispatch } from "react-redux"
 import { logout } from "../../store/slice/authSlice"
 import { getCart } from "../../store/slice/cartSlice"
 import { getCategories } from "../../store/slice/categorySlice"
+import { FiSearch, FiShoppingBag, FiUser, FiMenu, FiX, FiChevronDown, FiHeart } from "react-icons/fi"
+import "./Header.css"
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -26,8 +30,17 @@ const Header = () => {
     }
   }, [dispatch, token])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   const handleLogout = () => {
     dispatch(logout())
+    setIsUserMenuOpen(false)
     navigate("/")
   }
 
@@ -43,196 +56,221 @@ const Header = () => {
   const cartItemsCount = cart.items?.reduce((total, item) => total + item.quantity, 0) || 0
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="container px-4 mx-auto">
-        {/* Top Bar */}
-        <div className="items-center justify-between hidden py-2 text-sm border-b md:flex">
-          <div className="text-gray-600">Free shipping on orders over ₹999</div>
-          <div className="flex space-x-4">
-            <Link to="/track-order" className="text-gray-600 hover:text-gray-800">
-              Track Order
-            </Link>
-            <Link to="/help" className="text-gray-600 hover:text-gray-800">
-              Help
-            </Link>
+    <>
+      {/* Top Banner */}
+      <div className="top-banner">
+        <div className="container">
+          <div className="banner-content">
+            <span className="banner-text">🚀 Free shipping on orders over ₹999 | 24/7 Customer Support</span>
+            <div className="banner-links">
+              <Link to="/track-order" className="banner-link">
+                Track Order
+              </Link>
+              <Link to="/help" className="banner-link">
+                Help
+              </Link>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Main Header */}
-        <div className="flex items-center justify-between py-4">
-          {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-gray-800">
-            Ksauni Bliss
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden space-x-8 lg:flex">
-            <Link to="/" className="font-medium text-gray-700 hover:text-gray-900">
-              Home
-            </Link>
-            <div className="relative group">
-              <button className="flex items-center font-medium text-gray-700 hover:text-gray-900">
-                Categories
-                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div className="absolute left-0 invisible w-48 py-2 transition-all duration-200 bg-white rounded-md shadow-lg opacity-0 top-full group-hover:opacity-100 group-hover:visible">
-                {categories.map((category) => (
-                  <Link
-                    key={category._id}
-                    to={`/products?category=${category._id}`}
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
+      {/* Main Header */}
+      <header className={`main-header ${isScrolled ? "scrolled" : ""}`}>
+        <div className="container">
+          <div className="header-content">
+            {/* Logo */}
+            <Link to="/" className="logo">
+              <div className="logo-icon">
+                <span>K</span>
               </div>
-            </div>
-            <Link to="/products" className="font-medium text-gray-700 hover:text-gray-900">
-              All Products
-            </Link>
-            <Link to="/about" className="font-medium text-gray-700 hover:text-gray-900">
-              About
-            </Link>
-            <Link to="/contact" className="font-medium text-gray-700 hover:text-gray-900">
-              Contact
-            </Link>
-          </nav>
-
-          {/* Search, Cart, User Actions */}
-          <div className="flex items-center space-x-4">
-            {/* Search */}
-            <div className="relative">
-              <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="p-2 text-gray-600 hover:text-gray-800">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-
-              {isSearchOpen && (
-                <div className="absolute right-0 p-4 mt-2 bg-white rounded-md shadow-lg top-full w-80">
-                  <form onSubmit={handleSearch}>
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      autoFocus
-                    />
-                  </form>
-                </div>
-              )}
-            </div>
-
-            {/* Cart */}
-            <Link to="/cart" className="relative p-2 text-gray-600 hover:text-gray-800">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
-                />
-              </svg>
-              {cartItemsCount > 0 && (
-                <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full -top-1 -right-1">
-                  {cartItemsCount}
-                </span>
-              )}
+              <span className="logo-text">Ksauni Bliss</span>
             </Link>
 
-            {/* User Menu */}
-            {user ? (
-              <div className="relative group">
-                <button className="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                  <div className="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-full">
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
-                  <span className="hidden md:block">{user.name}</span>
+            {/* Desktop Navigation */}
+            <nav className="desktop-nav">
+              <Link to="/" className="nav-link">
+                <span>Home</span>
+              </Link>
+
+              <div className="nav-dropdown">
+                <button className="nav-link dropdown-trigger">
+                  <span>Categories</span>
+                  <FiChevronDown className="dropdown-icon" />
                 </button>
-                <div className="absolute right-0 invisible w-48 py-2 mt-2 transition-all duration-200 bg-white rounded-md shadow-lg opacity-0 top-full group-hover:opacity-100 group-hover:visible">
-                  <Link to="/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                    Dashboard
-                  </Link>
-                  <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                    My Orders
-                  </Link>
-                  <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                    Profile
-                  </Link>
-                  {user.role === "admin" && (
-                    <Link to="/admin" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                      Admin Panel
+                <div className="dropdown-menu">
+                  {categories.map((category) => (
+                    <Link key={category._id} to={`/products?category=${category._id}`} className="dropdown-item">
+                      {category.name}
                     </Link>
-                  )}
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
+                  ))}
                 </div>
               </div>
-            ) : (
-              <div className="flex space-x-2">
-                <Link to="/login" className="px-4 py-2 font-medium text-gray-700 hover:text-gray-900">
-                  Login
-                </Link>
-                <Link to="/register" className="px-4 py-2 font-medium text-white bg-black rounded-md hover:bg-gray-800">
-                  Sign Up
-                </Link>
-              </div>
-            )}
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-gray-600 lg:hidden hover:text-gray-800"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="py-4 border-t lg:hidden">
-            <nav className="flex flex-col space-y-4">
-              <Link to="/" className="font-medium text-gray-700 hover:text-gray-900">
-                Home
-              </Link>
-              <Link to="/products" className="font-medium text-gray-700 hover:text-gray-900">
-                All Products
-              </Link>
-              {categories.map((category) => (
-                <Link
-                  key={category._id}
-                  to={`/products?category=${category._id}`}
-                  className="pl-4 text-gray-600 hover:text-gray-800"
-                >
-                  {category.name}
-                </Link>
-              ))}
-              <Link to="/about" className="font-medium text-gray-700 hover:text-gray-900">
-                About
-              </Link>
-              <Link to="/contact" className="font-medium text-gray-700 hover:text-gray-900">
-                Contact
+              <Link to="/products" className="nav-link">
+                <span>All Products</span>
               </Link>
             </nav>
+
+            {/* Search Bar */}
+            <div className="search-container">
+              <form onSubmit={handleSearch} className="search-form">
+                <FiSearch className="search-icon" />
+                <input
+                  type="text"
+                  placeholder="Search for products, brands and more..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="search-input"
+                />
+                <button type="submit" className="search-btn">
+                  Search
+                </button>
+              </form>
+            </div>
+
+            {/* Header Actions */}
+            <div className="header-actions">
+              {/* Mobile Search */}
+              <button className="action-btn mobile-search-btn" onClick={() => setIsSearchOpen(!isSearchOpen)}>
+                <FiSearch />
+              </button>
+
+              {/* Wishlist */}
+              <Link to="/wishlist" className="action-btn">
+                <FiHeart />
+                <span className="action-label">Wishlist</span>
+              </Link>
+
+              {/* Cart */}
+              <Link to="/cart" className="action-btn cart-btn">
+                <div className="cart-icon-wrapper">
+                  <FiShoppingBag />
+                  {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
+                </div>
+                <span className="action-label">Cart</span>
+              </Link>
+
+              {/* User Menu */}
+              {user ? (
+                <div className="user-menu">
+                  <button className="user-btn" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
+                    <div className="user-avatar">{user.name.charAt(0).toUpperCase()}</div>
+                    <span className="user-name">{user.name}</span>
+                    <FiChevronDown className="user-dropdown-icon" />
+                  </button>
+
+                  {isUserMenuOpen && (
+                    <div className="user-dropdown">
+                      <div className="user-info">
+                        <div className="user-avatar-large">{user.name.charAt(0).toUpperCase()}</div>
+                        <div>
+                          <p className="user-name-large">{user.name}</p>
+                          <p className="user-email">{user.email}</p>
+                        </div>
+                      </div>
+                      <div className="dropdown-divider"></div>
+                      <Link to="/dashboard" className="dropdown-item">
+                        <FiUser className="dropdown-icon" />
+                        Dashboard
+                      </Link>
+                      <Link to="/orders" className="dropdown-item">
+                        <FiShoppingBag className="dropdown-icon" />
+                        My Orders
+                      </Link>
+                      <Link to="/profile" className="dropdown-item">
+                        <FiUser className="dropdown-icon" />
+                        Profile
+                      </Link>
+                      {user.role === "admin" && (
+                        <Link to="/admin" className="dropdown-item">
+                          <FiUser className="dropdown-icon" />
+                          Admin Panel
+                        </Link>
+                      )}
+                      <div className="dropdown-divider"></div>
+                      <button onClick={handleLogout} className="dropdown-item logout-btn">
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="auth-buttons">
+                  <Link to="/login" className="login-btn">
+                    Login
+                  </Link>
+                  <Link to="/register" className="signup-btn">
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+
+              {/* Mobile Menu Toggle */}
+              <button className="mobile-menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                {isMenuOpen ? <FiX /> : <FiMenu />}
+              </button>
+            </div>
           </div>
-        )}
-      </div>
-    </header>
+
+          {/* Mobile Search */}
+          {isSearchOpen && (
+            <div className="mobile-search">
+              <form onSubmit={handleSearch} className="mobile-search-form">
+                <FiSearch className="mobile-search-icon" />
+                <input
+                  type="text"
+                  placeholder="Search for products, brands and more..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="mobile-search-input"
+                  autoFocus
+                />
+                <button type="submit" className="mobile-search-btn">
+                  Search
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Mobile Menu */}
+          {isMenuOpen && (
+            <div className="mobile-menu">
+              <nav className="mobile-nav">
+                <Link to="/" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                  Home
+                </Link>
+                <Link to="/products" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                  All Products
+                </Link>
+                <div className="mobile-categories">
+                  <p className="mobile-categories-title">Categories</p>
+                  {categories.map((category) => (
+                    <Link
+                      key={category._id}
+                      to={`/products?category=${category._id}`}
+                      className="mobile-category-link"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+                {!user && (
+                  <div className="mobile-auth">
+                    <Link to="/login" className="mobile-auth-link" onClick={() => setIsMenuOpen(false)}>
+                      Login
+                    </Link>
+                    <Link to="/register" className="mobile-auth-link signup" onClick={() => setIsMenuOpen(false)}>
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
+              </nav>
+            </div>
+          )}
+        </div>
+      </header>
+    </>
   )
 }
 

@@ -1,6 +1,6 @@
-import HeroSection from "../components/Home/HeroSection"
-import FeaturedProducts from "../components/Home/FeaturedProducts"
-import TrendingProducts from "../components/Home/TrendingProducts"
+import HeroSection from "../components/home/HeroSection"
+import FeaturedProducts from "../components/home/FeaturedProducts"
+import TrendingProducts from "../components/home/TrendingProducts"
 
 const Home = () => {
   return (
