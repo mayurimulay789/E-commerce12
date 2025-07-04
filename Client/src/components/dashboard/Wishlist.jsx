@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
-import { getWishlist, removeFromWishlist } from "../../store/slices/wishlistSlice"
-import { addToCart } from "../../store/slices/cartSlice"
+import { getWishlist, removeFromWishlist } from "../../store/slice/wishlist"
+import { addToCart } from "../../store/slice/cartSlice"
 
 const Wishlist = () => {
   const dispatch = useDispatch()

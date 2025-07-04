@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { login, reset } from "../store/slices/authSlice"
+import { login, reset } from "../store/slice/authSlice"
 import toast from "react-hot-toast"
 
 const Login = () => {

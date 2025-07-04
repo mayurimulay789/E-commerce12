@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useSearchParams } from "react-router-dom"
-import { getProducts } from "../store/slices/productSlice"
-import { getCategories } from "../store/slices/categorySlice"
+import { getProducts } from "../store/slice/productSlice"
+import { getCategories } from "../store/slice/categorySlice"
 import ProductCard from "../components/product/ProductCard"
 import FilterSidebar from "../components/product/FilterSidebar"
 import ProductSort from "../components/product/ProductSort"
 import Breadcrumbs from "../components/ui/Breadcumbs"
 import Pagination from "../components/ui/Pagination"
-
+import ProductTabs from "../components/product/ProductaTabs"
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)

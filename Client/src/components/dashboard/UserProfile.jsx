@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { updateProfile } from "../../store/slices/authSlice"
+import { updateProfile } from "../../store/slice/authSlice"
 
 const UserProfile = () => {
   const dispatch = useDispatch()

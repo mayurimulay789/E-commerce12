@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { getProducts } from "../../store/slices/productSlice"
+import { getProducts } from "../../store/slice/productSlice"
 import ProductCard from "./ProductCard"
 
 const ProductRecommendations = ({ currentProduct }) => {

@@ -1,7 +1,7 @@
 "use client"
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { addToCart } from "../../store/slices/cartSlice"
+import { addToCart } from "../../store/slice/cartSlice"
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch()

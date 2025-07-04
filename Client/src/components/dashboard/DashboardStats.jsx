@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
-import { getUserOrders } from "../../store/slices/orderSlice"
+import { getUserOrders } from "../../store/slice/orderSlice"
 
 const DashboardStats = () => {
   const dispatch = useDispatch()

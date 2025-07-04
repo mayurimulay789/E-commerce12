@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import authReducer from "./slices/authSlice"
-import productReducer from "./slices/productSlice"
-import cartReducer from "./slices/cartSlice"
-import orderReducer from "./slices/orderSlice"
-import categoryReducer from "./slices/categorySlice"
-import wishlistReducer from "./slices/wishlistSlice"
-import addressReducer from "./slices/addressSlice"
+import authReducer from "./slice/authSlice"
+import productReducer from "./slice/productSlice"
+import cartReducer from "./slice/cartSlice"
+import orderReducer from "./slice/orderSlice"
+import categoryReducer from "./slice/categorySlice"
+import wishlistReducer from "./slice/wishlist"
+import addressReducer from "./slice/addressSlice"
 
 export const store = configureStore({
   reducer: {
